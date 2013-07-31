@@ -18,7 +18,7 @@
         "symfony/form": "~2.3"
     },
     "autoload": {
-        "psr-0": { "Black\\AssetsBundle": "" }
+        "psr-0": { "Black\\Bundle\\AssetsBundle": "" }
     },
-    "target-dir": "Black/AssetsBundle"
+    "target-dir": "Black/Bundle/AssetsBundle"
 }
