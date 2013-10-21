@@ -1,0 +1,83 @@
+{% block form_row %}
+    <div id="{{ form.vars.id ~ "_group" }}">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}
+
+{% block textarea_widget %}
+    {% spaceless %}
+        <textarea {{ block('widget_attributes') }} rows="10">{{ value }}</textarea>
+    {% endspaceless %}
+{% endblock textarea_widget %}
+
+{% block choice_widget %}
+    {% spaceless %}
+        {% if expanded %}
+            {{ block('choice_widget_expanded') }}
+        {% else %}
+            {{ block('choice_widget_collapsed') }}
+        {% endif %}
+    {% endspaceless %}
+{% endblock choice_widget %}
+
+{% block choice_widget_expanded %}
+    {% spaceless %}
+
+        {% if multiple %}
+            {% for child in form %}
+                <label class="checkbox" {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                {{ form_widget(child) }} {{ child.vars.label|trans({}, "form") }}
+                </label>
+            {% endfor %}
+        {% else %}
+            {% for child in form %}
+                <label class="radio" {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                {{ form_widget(child) }} {{ child.vars.label|trans({}, "form") }}
+                </label>
+            {% endfor %}
+        {% endif %}
+
+    {% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block form_label %}
+    {% spaceless %}
+        {% if not compound %}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {% endif %}
+
+        {% if required %}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {% endif %}
+
+        {% if label is empty %}
+            {% set label = name|humanize %}
+        {% endif %}
+
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            {{ label|trans({}, "form") }}
+        </label>
+    {% endspaceless %}
+{% endblock form_label %}
+
+{% block choice_label %}
+    {% spaceless %}
+        {% if not compound %}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {% endif %}
+
+        {% if required %}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {% endif %}
+
+        {% if label is empty %}
+            {% set label = name|humanize %}
+        {% endif %}
+
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            {{ label|trans({}, "form") }}
+        </label>
+    {% endspaceless %}
+{% endblock choice_label %}
