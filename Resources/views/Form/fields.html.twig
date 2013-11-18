@@ -1,9 +1,19 @@
 {% block form_row %}
-    <div id="{{ form.vars.id ~ "_group" }}">
-        {{ form_label(form) }}
-        {{ form_widget(form) }}
-        {{ form_errors(form) }}
-    </div>
+
+    {% if 'checkbox' in form.vars.block_prefixes %}
+        <div id="{{ form.vars.id ~ "_group" }} b10">
+            {{ form_widget(form) }}
+            {{ form_label(form) }}
+            {{ form_errors(form) }}
+        </div>
+    {% else %}
+        <div id="{{ form.vars.id ~ "_group" }} control-group">
+            {{ form_label(form) }}
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
+
 {% endblock %}
 
 {% block textarea_widget %}
@@ -42,6 +52,12 @@
     {% endspaceless %}
 {% endblock choice_widget_expanded %}
 
+{% block checkbox_widget %}
+    {% spaceless %}
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    {% endspaceless %}
+{% endblock checkbox_widget %}
+
 {% block form_label %}
     {% spaceless %}
         {% if not compound %}
@@ -56,7 +72,7 @@
             {% set label = name|humanize %}
         {% endif %}
 
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        <label {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
             {{ label|trans({}, "form") }}
         </label>
     {% endspaceless %}
@@ -81,3 +97,14 @@
         </label>
     {% endspaceless %}
 {% endblock choice_label %}
+
+{% block file_widget %}
+    {% spaceless %}
+
+        {{ block('form_widget') }}
+        {% if image_url is not null %}
+            <img src="{{ asset(image_url) }}" width="200"/>
+        {% endif %}
+
+    {% endspaceless %}
+{% endblock %}
