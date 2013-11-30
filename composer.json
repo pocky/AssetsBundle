@@ -2,7 +2,7 @@
     "name": "black/assets-bundle",
     "type": "symfony-bundle",
     "description": "Symfony BlackAssetsBundle",
-    "keywords": ["Asset"],
+    "keywords": ["Asset", "Symfony2", "Black"],
     "homepage": "http://www.lablackroom.com",
     "license": "MIT",
     "authors": [
