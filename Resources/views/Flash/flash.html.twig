@@ -1,0 +1,12 @@
+{% for key, flashes in app.session.flashbag %}
+<div class="alert alert-{{ key }}">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+    <ul>
+    {% for flash in flashes %}
+        <li>{{ flash|trans({}, "views") }}</li>
+    {% endfor %}
+    </ul>
+
+</div>
+{% endfor %}
