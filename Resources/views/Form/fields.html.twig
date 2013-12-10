@@ -129,7 +129,7 @@
                 {{ form_errors(form) }}
 
                 {% for rows in form %}
-                    <div class="form-row">
+                    <div class="form-row offset1">
                         {% for row in rows %}
                             <div id="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
                                 {{ form_label(row) }}
@@ -265,12 +265,12 @@
     {% spaceless %}
         {% set fieldNum = 1 %}
         {% for row in prototype %}
-            <div class="{{ form.vars.id ~ "_group" }} control-group form-row {% if loop.last %}noBorderB{% endif %}">
+            <div class="{{ form.vars.id ~ "_group" }} control-group form-row offset1 {% if loop.last %}noBorderB{% endif %}">
                 {{ form_label(row) }}
                 {{ form_widget(row) }}
             </div>
         {% else %}
-            <div class="{{ form.vars.id ~ "_group" }} control-group form-row">
+            <div class="{{ form.vars.id ~ "_group" }} control-group form-row offset1">
                 {{ form_label(prototype) }}
                 {{ form_widget(prototype) }}
             </div>
