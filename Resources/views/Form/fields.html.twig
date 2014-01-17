@@ -93,7 +93,7 @@
             {% set label = name|humanize %}
         {% endif %}
 
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        <label {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
             {{ label|trans({}, translation_domain) }}
         </label>
     {% endspaceless %}
@@ -129,15 +129,14 @@
                 {{ form_errors(form) }}
 
                 {% for rows in form %}
-                    <div class="form-row offset1">
+                    <div class="form-row">
                         {% for row in rows %}
-                            <div id="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
+                            <div class="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
                                 {{ form_label(row) }}
                                 {{ form_widget(row) }}
                             </div>
                         {% else %}
-                            <div id="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
-                                {{ form_label(rows) }}
+                            <div class="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
                                 {{ form_widget(rows) }}
                             </div>
                         {% endfor %}
@@ -175,7 +174,7 @@
                             });
 
                             function add_{{ id }}FormDeleteLink($tagFormDiv) {
-                                var $removeFormB = $('<a href="#" class="btn btn-warning" title="{% trans  from "views" %}admin.admin.js.remove.text{% endtrans %}">{% trans  from "views" %}admin.admin.js.remove.text{% endtrans %}</a>');
+                                var $removeFormB = $('<a href="#" class="btn btn-warning" title="{% trans  from "views" %}black.bundle.assets.fields.remove.text{% endtrans %}">{% trans  from "views" %}black.bundle.assets.fields.remove.text{% endtrans %}</a>');
 
                                 if ($tagFormDiv.children("a.add").length === 0) {
 
@@ -183,7 +182,6 @@
 
                                     $removeFormB.on('click', function (e) {
                                         {{ id }}Count--;
-
                                         $tagFormDiv.remove();
                                         {{ id }}Integrity();
 
@@ -270,8 +268,7 @@
                 {{ form_widget(row) }}
             </div>
         {% else %}
-            <div class="{{ form.vars.id ~ "_group" }} control-group form-row offset1">
-                {{ form_label(prototype) }}
+            <div class="{{ form.vars.id ~ "_group" }} control-group form-row">
                 {{ form_widget(prototype) }}
             </div>
         {% endfor %}
