@@ -358,3 +358,34 @@
     {% endspaceless %}
 {% endblock %}
 
+{% block left_box_widget_options %}
+    {% spaceless %}
+        {% for group_label, choice in options %}
+            {% if choice is iterable %}
+                <optgroup label="{{ group_label|trans({}, "form") }}">
+                    {% set options = choice %}
+                    {{ block('left_box_widget_options') }}
+                </optgroup>
+            {% else %}
+                {% if choice is not selectedchoice(value) %}
+                    <option value="{{ choice.value }}" >{{ choice.label|trans({}, "form") }}</option>{% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endspaceless %}
+{% endblock left_box_widget_options %}
+
+{% block right_box_widget_options %}
+    {% spaceless %}
+        {% for group_label, choice in options %}
+            {% if choice is iterable %}
+                <optgroup label="{{ group_label|trans({}, "form") }}">
+                    {% set options = choice %}
+                    {{ block('right_box_widget_options') }}
+                </optgroup>
+            {% else %}
+                {% if choice is selectedchoice(value) %}
+                    <option value="{{ choice.value }}" >{{ choice.label|trans({}, "form") }}</option>{% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endspaceless %}
+{% endblock right_box_widget_options %}
