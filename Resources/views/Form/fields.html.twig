@@ -131,12 +131,10 @@
 
 {% block file_widget %}
     {% spaceless %}
-
         {{ block('form_widget') }}
         {% if image_url is not null %}
             <img src="{{ asset(image_url) }}" width="200"/>
         {% endif %}
-
     {% endspaceless %}
 {% endblock %}
 
@@ -151,7 +149,7 @@
 
 {% block collection_widget %}
     {% spaceless %}
-        <div class="collection span6">
+        <div class="collection">
             {% if prototype is defined %}
                 {% set attr = attr|merge({'data-prototype': block('collection_item_widget') }) %}
             {% endif %}
@@ -190,9 +188,9 @@
 
                         jQuery(document).ready(function () {
 
-                            {{ id }}IndexIntegrity = {{ id }}Count = jQuery('#{{ id }}').children('.form-row').length;
+                            {{ id }}IndexIntegrity = {{ id }}Count = jQuery('#{{ id }}').children('.row-fluid').length;
 
-                            jQuery('#{{ id }}').children('.form-row').each(function () {
+                            jQuery('#{{ id }}').children('.row-fluid').each(function () {
 
                                 add_{{ id }}FormDeleteLink($(this));
 
