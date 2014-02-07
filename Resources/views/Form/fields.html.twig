@@ -147,13 +147,25 @@
     {% endspaceless %}
 {% endblock button_widget %}
 
+{% block form_widget_compound %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }} style="padding-top: 40px;">
+            {% if form.parent is empty %}
+                {{ form_errors(form) }}
+            {% endif %}
+            {{ block('form_rows') }}
+            {{ form_rest(form) }}
+        </div>
+    {% endspaceless %}
+{% endblock form_widget_compound %}
+
 {% block collection_widget %}
     {% spaceless %}
         <div class="collection">
             {% if prototype is defined %}
                 {% set attr = attr|merge({'data-prototype': block('collection_item_widget') }) %}
             {% endif %}
-            <div {{ block('widget_container_attributes') }}>
+            <div {{ block('widget_container_attributes') }} style="padding-top: 40px">
                 {{ form_errors(form) }}
 
                 {% for rows in form %}
@@ -179,9 +191,7 @@
 
                 {% if 'add' == attrname_split|first %}
                     <script>
-                        function {{ id }}Integrity() {
-
-                        }
+                        function {{ id }}Integrity() {};
 
                         var {{ id }}Count = 0;
                         var {{ id }}IndexIntegrity = 0;
@@ -202,7 +212,7 @@
                             });
 
                             function add_{{ id }}FormDeleteLink($tagFormDiv) {
-                                var $removeFormB = $('<a href="#" class="btn btn-warning" title="{% trans  from "views" %}black.bundle.assets.fields.remove.text{% endtrans %}">{% trans  from "views" %}black.bundle.assets.fields.remove.text{% endtrans %}</a>');
+                                var $removeFormB = $('<a href="#" class="btn btn-warning pull-right" title="{% trans  from "views" %}black.bundle.assets.fields.remove.text{% endtrans %}">{% trans  from "views" %}black.bundle.assets.fields.remove.text{% endtrans %}</a>');
 
                                 if ($tagFormDiv.children("a.add").length === 0) {
 
@@ -274,11 +284,14 @@
                             });
                         });
                     </script>
-                    <a href="#" id="{{ attrvalue }}-{{ id }}"
-                       title="{% trans from "views" %}black.bundle.admin.adminForm.fields.add.title{% endtrans %}"
-                       class="btn">
-                        {% trans from "views" %}black.bundle.admin.adminForm.fields.add.text{% endtrans %}
-                    </a>
+
+                    <div class="span4">
+                        <a href="#" id="{{ attrvalue }}-{{ id }}"
+                           title="{% trans from "views" %}black.bundle.admin.adminForm.fields.add.title{% endtrans %}"
+                           class="btn pull-right" style="margin-right: 20px">
+                            {% trans from "views" %}black.bundle.admin.adminForm.fields.add.text{% endtrans %}
+                        </a>
+                    </div>
                 {% endif %}
             {% endfor %}
 
@@ -327,7 +340,7 @@
         });
     </script>
     {% spaceless %}
-        <div class="leftBox span3">
+        <div class="leftBox span5">
             <input type="text" id="{{ id }}1Filter" class="boxFilter"
                    placeholder="{% trans from "form" %}black.bundle.assets.fields.search{% endtrans %}"/>
             <button type="button" id="{{ id }}1Clear" class="dualBtn fltr">x</button>
@@ -352,14 +365,14 @@
 
             <div class="displayNone"><select id="{{ id }}1Storage"></select></div>
         </div>
-        <div class="dualControl" style="float: left">
+        <div class="dualControl span3">
             <button id="to{{ id }}2" type="button" class="dualBtn mr5 mb15">&nbsp;&gt;&nbsp;</button>
             <button id="allTo{{ id }}2" type="button" class="dualBtn">&nbsp;&gt;&gt;&nbsp;</button>
             <br/>
             <button id="to{{ id }}1" type="button" class="dualBtn mr5">&nbsp;&lt;&nbsp;</button>
             <button id="allTo{{ id }}1" type="button" class="dualBtn">&nbsp;&lt;&lt;&nbsp;</button>
         </div>
-        <div class="rightBox span3">
+        <div class="rightBox span5">
             <input type="text" id="{{ id }}2Filter" class="boxFilter"
                    placeholder="{% trans from "form" %}black.bundle.assets.fields.search{% endtrans %}"/>
             <button type="button" id="{{ id }}2Clear" class="dualBtn fltr">x</button>
