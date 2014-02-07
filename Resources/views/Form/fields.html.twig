@@ -327,7 +327,7 @@
         });
     </script>
     {% spaceless %}
-        <div class="leftBox">
+        <div class="leftBox span3">
             <input type="text" id="{{ id }}1Filter" class="boxFilter"
                    placeholder="{% trans from "form" %}black.bundle.assets.fields.search{% endtrans %}"/>
             <button type="button" id="{{ id }}1Clear" class="dualBtn fltr">x</button>
@@ -352,14 +352,14 @@
 
             <div class="displayNone"><select id="{{ id }}1Storage"></select></div>
         </div>
-        <div class="dualControl">
+        <div class="dualControl" style="float: left">
             <button id="to{{ id }}2" type="button" class="dualBtn mr5 mb15">&nbsp;&gt;&nbsp;</button>
             <button id="allTo{{ id }}2" type="button" class="dualBtn">&nbsp;&gt;&gt;&nbsp;</button>
             <br/>
             <button id="to{{ id }}1" type="button" class="dualBtn mr5">&nbsp;&lt;&nbsp;</button>
             <button id="allTo{{ id }}1" type="button" class="dualBtn">&nbsp;&lt;&lt;&nbsp;</button>
         </div>
-        <div class="rightBox">
+        <div class="rightBox span3">
             <input type="text" id="{{ id }}2Filter" class="boxFilter"
                    placeholder="{% trans from "form" %}black.bundle.assets.fields.search{% endtrans %}"/>
             <button type="button" id="{{ id }}2Clear" class="dualBtn fltr">x</button>
