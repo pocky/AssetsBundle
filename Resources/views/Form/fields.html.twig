@@ -310,7 +310,11 @@
             </div>
         {% else %}
             <div class="{{ form.vars.id ~ "_group" }} control-group form-row">
+                {% if firstOrNot is not defined %}
+                <label class="control-label span4"></label>
+                {% endif %}
                 {{ form_widget(prototype) }}
+                {% set firstOrNot = true %}
             </div>
         {% endfor %}
     {% endspaceless %}
