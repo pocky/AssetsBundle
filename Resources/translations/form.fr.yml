@@ -12,3 +12,5 @@ black:
                             label: Annuler les modifications
                         delete:
                             label: Suppprimer
+            fields:
+                search: Rechercher

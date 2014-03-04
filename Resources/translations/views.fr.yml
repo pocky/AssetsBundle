@@ -1,0 +1,7 @@
+black:
+    bundle:
+        assets:
+            fields:
+                remove:
+                    text: Supprimer
+                    title: Supprimer

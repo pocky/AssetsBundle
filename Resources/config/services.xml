@@ -6,9 +6,12 @@
 
     <parameters>
         <parameter key="black_assets.form.event.button.class">Black\Bundle\AssetsBundle\Form\EventListener\SetButtonsSubscriber</parameter>
+        <parameter key="black_assets.form.event.button2.class">Black\Bundle\AssetsBundle\Form\EventListener\SetButtonsRestrictSubscriber</parameter>
     </parameters>
 
     <services>
         <service id="black_assets.form.event.button" class="%black_assets.form.event.button.class%" />
+        <service id="black_assets.form.event.button2" class="%black_assets.form.event.button2.class%" />
     </services>
+
 </container>

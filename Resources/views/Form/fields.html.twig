@@ -1,5 +1,6 @@
 {% block form_row %}
 
+    {% spaceless %}
     {% if 'checkbox' in form.vars.block_prefixes %}
         <div id="{{ form.vars.id ~ "_group" }}">
             <label class="checkbox" {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
@@ -8,18 +9,19 @@
             {{ form_errors(form) }}
         </div>
     {% else %}
-        <div id="{{ form.vars.id ~ "_group" }} control-group">
+        <div id="{{ form.vars.id ~ "_group" }}" class="row-fluid control-group">
             {{ form_label(form) }}
             {{ form_widget(form) }}
             {{ form_errors(form) }}
         </div>
     {% endif %}
+    {% endspaceless %}
 
 {% endblock %}
 
 {% block textarea_widget %}
     {% spaceless %}
-        <textarea {{ block('widget_attributes') }} rows="10">{{ value }}</textarea>
+        <textarea {{ block('widget_attributes') }} >{{ value }}</textarea>
     {% endspaceless %}
 {% endblock textarea_widget %}
 
@@ -33,8 +35,31 @@
     {% endspaceless %}
 {% endblock choice_widget %}
 
+{% block choice_widget_collapsed %}
+    {% spaceless %}
+
+        {% set attr = attr|merge({'class': (attr.class|default('styled'))|trim}) %}
+
+        <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+            {% if empty_value is not none %}
+                <option value="">{{ empty_value|trans({}, translation_domain) }}</option>
+            {% endif %}
+            {% if preferred_choices|length > 0 %}
+                {% set options = preferred_choices %}
+                {{ block('choice_widget_options') }}
+                {% if choices|length > 0 and separator is not none %}
+                    <option disabled="disabled">{{ separator }}</option>
+                {% endif %}
+            {% endif %}
+            {% set options = choices %}
+            {{ block('choice_widget_options') }}
+        </select>
+    {% endspaceless %}
+{% endblock choice_widget_collapsed %}
+
 {% block choice_widget_expanded %}
     {% spaceless %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('span8'))|trim}) %}
 
         {% if multiple %}
             {% for child in form %}
@@ -61,6 +86,31 @@
 
 {% block form_label %}
     {% spaceless %}
+
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('control-label span4'))|trim}) %}
+
+        {% if not compound %}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {% endif %}
+
+        {% if required %}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' required')|trim}) %}
+        {% endif %}
+
+        {% if label is empty %}
+            {% set label = name|humanize %}
+        {% endif %}
+
+        <label {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            {{ label|trans({}, translation_domain) }}
+        </label>
+    {% endspaceless %}
+{% endblock form_label %}
+
+{% block choice_label %}
+    {% spaceless %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('control-label span4'))|trim}) %}
+
         {% if not compound %}
             {% set label_attr = label_attr|merge({'for': id}) %}
         {% endif %}
@@ -77,36 +127,14 @@
             {{ label|trans({}, translation_domain) }}
         </label>
     {% endspaceless %}
-{% endblock form_label %}
-
-{% block choice_label %}
-    {% spaceless %}
-        {% if not compound %}
-            {% set label_attr = label_attr|merge({'for': id}) %}
-        {% endif %}
-
-        {% if required %}
-            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
-        {% endif %}
-
-        {% if label is empty %}
-            {% set label = name|humanize %}
-        {% endif %}
-
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-            {{ label|trans({}, translation_domain) }}
-        </label>
-    {% endspaceless %}
 {% endblock choice_label %}
 
 {% block file_widget %}
     {% spaceless %}
-
         {{ block('form_widget') }}
         {% if image_url is not null %}
             <img src="{{ asset(image_url) }}" width="200"/>
         {% endif %}
-
     {% endspaceless %}
 {% endblock %}
 
@@ -119,25 +147,36 @@
     {% endspaceless %}
 {% endblock button_widget %}
 
+{% block form_widget_compound %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }} style="padding-top: 40px;">
+            {% if form.parent is empty %}
+                {{ form_errors(form) }}
+            {% endif %}
+            {{ block('form_rows') }}
+            {{ form_rest(form) }}
+        </div>
+    {% endspaceless %}
+{% endblock form_widget_compound %}
+
 {% block collection_widget %}
     {% spaceless %}
         <div class="collection">
             {% if prototype is defined %}
                 {% set attr = attr|merge({'data-prototype': block('collection_item_widget') }) %}
             {% endif %}
-            <div {{ block('widget_container_attributes') }}>
+            <div {{ block('widget_container_attributes') }} style="padding-top: 40px">
                 {{ form_errors(form) }}
 
                 {% for rows in form %}
-                    <div class="form-row offset1">
+                    <div class="row-fluid">
                         {% for row in rows %}
-                            <div id="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
+                            <div class="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
                                 {{ form_label(row) }}
                                 {{ form_widget(row) }}
                             </div>
                         {% else %}
-                            <div id="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
-                                {{ form_label(rows) }}
+                            <div class="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
                                 {{ form_widget(rows) }}
                             </div>
                         {% endfor %}
@@ -152,18 +191,16 @@
 
                 {% if 'add' == attrname_split|first %}
                     <script>
-                        function {{ id }}Integrity() {
-
-                        }
+                        function {{ id }}Integrity() {};
 
                         var {{ id }}Count = 0;
                         var {{ id }}IndexIntegrity = 0;
 
                         jQuery(document).ready(function () {
 
-                            {{ id }}IndexIntegrity = {{ id }}Count = jQuery('#{{ id }}').children('.form-row').length;
+                            {{ id }}IndexIntegrity = {{ id }}Count = jQuery('#{{ id }}').children('.row-fluid').length;
 
-                            jQuery('#{{ id }}').children('.form-row').each(function () {
+                            jQuery('#{{ id }}').children('.row-fluid').each(function () {
 
                                 add_{{ id }}FormDeleteLink($(this));
 
@@ -175,7 +212,7 @@
                             });
 
                             function add_{{ id }}FormDeleteLink($tagFormDiv) {
-                                var $removeFormB = $('<a href="#" class="btn btn-warning" title="{% trans  from "views" %}admin.admin.js.remove.text{% endtrans %}">{% trans  from "views" %}admin.admin.js.remove.text{% endtrans %}</a>');
+                                var $removeFormB = $('<a href="#" class="btn btn-warning pull-right" title="{% trans  from "views" %}black.bundle.assets.fields.remove.text{% endtrans %}">{% trans  from "views" %}black.bundle.assets.fields.remove.text{% endtrans %}</a>');
 
                                 if ($tagFormDiv.children("a.add").length === 0) {
 
@@ -183,7 +220,6 @@
 
                                     $removeFormB.on('click', function (e) {
                                         {{ id }}Count--;
-
                                         $tagFormDiv.remove();
                                         {{ id }}Integrity();
 
@@ -232,7 +268,7 @@
                                 {{ id }}Count++;
                                 {{ id }}IndexIntegrity++;
 
-                                var newDiv = jQuery('<div class="form-row"></div>');
+                                var newDiv = jQuery('<div class="row-fluid"></div>');
 
                                 newDiv[0].innerHTML = newWidget;
                                 add_{{ id }}FormDeleteLink(newDiv);
@@ -248,11 +284,14 @@
                             });
                         });
                     </script>
-                    <a href="#" id="{{ attrvalue }}-{{ id }}"
-                       title="{% trans from "views" %}black.bundle.admin.adminForm.fields.add.title{% endtrans %}"
-                       class="btn">
-                        {% trans from "views" %}black.bundle.admin.adminForm.fields.add.text{% endtrans %}
-                    </a>
+
+                    <div class="span4">
+                        <a href="#" id="{{ attrvalue }}-{{ id }}"
+                           title="{% trans from "views" %}black.bundle.admin.adminForm.fields.add.title{% endtrans %}"
+                           class="btn pull-right" style="margin-right: 20px">
+                            {% trans from "views" %}black.bundle.admin.adminForm.fields.add.text{% endtrans %}
+                        </a>
+                    </div>
                 {% endif %}
             {% endfor %}
 
@@ -265,15 +304,142 @@
     {% spaceless %}
         {% set fieldNum = 1 %}
         {% for row in prototype %}
-            <div class="{{ form.vars.id ~ "_group" }} control-group form-row offset1 {% if loop.last %}noBorderB{% endif %}">
+            <div class="{{ form.vars.id ~ "_group" }} control-group form-row {% if loop.last %}noBorderB{% endif %}">
                 {{ form_label(row) }}
                 {{ form_widget(row) }}
             </div>
         {% else %}
-            <div class="{{ form.vars.id ~ "_group" }} control-group form-row offset1">
-                {{ form_label(prototype) }}
+            <div class="{{ form.vars.id ~ "_group" }} control-group form-row">
+                {% if firstOrNot is not defined %}
+                <label class="control-label span4"></label>
+                {% endif %}
                 {{ form_widget(prototype) }}
+                {% set firstOrNot = true %}
             </div>
         {% endfor %}
     {% endspaceless %}
 {% endblock collection_item_widget %}
+
+{% block double_box_widget %}
+    <script>
+        $(function () {
+            $.configureBoxes({
+                useFilters: true,
+                useCounters: true,
+                box1View: '{{ id }}1View',
+                box1Storage: '{{ id }}1Storage',
+                box1Filter: '{{ id }}1Filter',
+                box1Clear: '{{ id }}1Clear',
+                box1Counter: '{{ id }}1Counter',
+                box2View: '{{ id }}2View',
+                box2Storage: '{{ id }}2Storage',
+                box2Filter: '{{ id }}2Filter',
+                box2Clear: '{{ id }}2Clear',
+                box2Counter: '{{ id }}2Counter',
+                to1: 'to{{ id }}1',
+                to2: 'to{{ id }}2',
+                allTo1: 'allTo{{ id }}1',
+                allTo2: 'allTo{{ id }}2'
+            });
+        });
+    </script>
+    {% spaceless %}
+        <div class="leftBox span5">
+            <input type="text" id="{{ id }}1Filter" class="boxFilter"
+                   placeholder="{% trans from "form" %}black.bundle.assets.fields.search{% endtrans %}"/>
+            <button type="button" id="{{ id }}1Clear" class="dualBtn fltr">x</button>
+            <br/>
+
+            <select id="{{ id }}1View" multiple="multiple" class="multiple" style="height:300px;">
+                {% if empty_value is not none %}
+                    <option value="">{{ empty_value|trans({}, "form") }}</option>
+                {% endif %}
+                {% if preferred_choices|length > 0 %}
+                    {% set options = preferred_choices %}
+                    {{ block('left_box_widget_options') }}
+                    {% if choices|length > 0 and separator is not none %}
+                        <option disabled="disabled">{{ separator }}</option>
+                    {% endif %}
+                {% endif %}
+                {% set options = choices %}
+                {{ block('left_box_widget_options') }}
+            </select>
+            <br/>
+            <span id="{{ id }}1Counter" class="countLabel"></span>
+
+            <div class="displayNone"><select id="{{ id }}1Storage"></select></div>
+        </div>
+        <div class="dualControl span3">
+            <button id="to{{ id }}2" type="button" class="dualBtn mr5 mb15">&nbsp;&gt;&nbsp;</button>
+            <button id="allTo{{ id }}2" type="button" class="dualBtn">&nbsp;&gt;&gt;&nbsp;</button>
+            <br/>
+            <button id="to{{ id }}1" type="button" class="dualBtn mr5">&nbsp;&lt;&nbsp;</button>
+            <button id="allTo{{ id }}1" type="button" class="dualBtn">&nbsp;&lt;&lt;&nbsp;</button>
+        </div>
+        <div class="rightBox span5">
+            <input type="text" id="{{ id }}2Filter" class="boxFilter"
+                   placeholder="{% trans from "form" %}black.bundle.assets.fields.search{% endtrans %}"/>
+            <button type="button" id="{{ id }}2Clear" class="dualBtn fltr">x</button>
+            <br/>
+            <select id="{{ id }}2View" name="{{ full_name }}" multiple="multiple" class="multiple"
+                    style="height:300px;">
+                {% if empty_value is not none %}
+                    <option value="">{{ empty_value|trans({}, "form") }}</option>
+                {% endif %}
+                {% if preferred_choices|length > 0 %}
+                    {% set options = preferred_choices %}
+                    {{ block('right_box_widget_options') }}
+                    {% if choices|length > 0 and separator is not none %}
+                        <option disabled="disabled">{{ separator }}</option>
+                    {% endif %}
+                {% endif %}
+                {% set options = choices %}
+                {{ block('right_box_widget_options') }}
+            </select><br/>
+            <span id="{{ id }}2Counter" class="countLabel"></span>
+
+            <div class="displayNone"><select id="{{ id }}2Storage"></select></div>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
+{% block left_box_widget_options %}
+    {% spaceless %}
+        {% for group_label, choice in options %}
+            {% if choice is iterable %}
+                <optgroup label="{{ group_label|trans({}, "form") }}">
+                    {% set options = choice %}
+                    {{ block('left_box_widget_options') }}
+                </optgroup>
+            {% else %}
+                {% if choice is not selectedchoice(value) %}
+                    <option value="{{ choice.value }}" >{{ choice.label|trans({}, "form") }}</option>{% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endspaceless %}
+{% endblock left_box_widget_options %}
+
+{% block right_box_widget_options %}
+    {% spaceless %}
+        {% for group_label, choice in options %}
+            {% if choice is iterable %}
+                <optgroup label="{{ group_label|trans({}, "form") }}">
+                    {% set options = choice %}
+                    {{ block('right_box_widget_options') }}
+                </optgroup>
+            {% else %}
+                {% if choice is selectedchoice(value) %}
+                    <option value="{{ choice.value }}" >{{ choice.label|trans({}, "form") }}</option>{% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endspaceless %}
+{% endblock right_box_widget_options %}
+
+{% block widget_attributes %}
+    {% spaceless %}
+        {% set attr = attr|merge({'class': (attr.class|default('span8'))|trim}) %}
+
+        id="{{ id }}" name="{{ full_name }}"{% if read_only %} readonly="readonly"{% endif %}{% if disabled %} disabled="disabled"{% endif %}{% if required %} required="required"{% endif %}{% if max_length %} maxlength="{{ max_length }}"{% endif %}{% if pattern %} pattern="{{ pattern }}"{% endif %}
+        {% for attrname, attrvalue in attr %}{% if attrname in ['placeholder', 'title'] %}{{ attrname }}="{{ attrvalue|trans({}, translation_domain) }}" {% else %}{{ attrname }}="{{ attrvalue }}" {% endif %}{% endfor %}
+    {% endspaceless %}
+{% endblock widget_attributes %}
