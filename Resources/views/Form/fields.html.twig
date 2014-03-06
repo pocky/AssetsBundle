@@ -165,6 +165,7 @@
                             </div>
                         {% else %}
                             <div class="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
+                                <label class="control-label span4"></label>
                                 {{ form_widget(rows) }}
                             </div>
                         {% endfor %}
@@ -282,6 +283,10 @@
                 {% endif %}
             {% endfor %}
 
+            <script>
+                $(".collection").prev().css( "margin-right", "100%" );
+            </script>
+
         </div>
         <div class="clear"></div>
     {% endspaceless %}
@@ -294,14 +299,23 @@
             <div class="{{ form.vars.id ~ "_group" }} control-group form-row {% if loop.last %}noBorderB{% endif %}">
                 {{ form_label(row) }}
                 {{ form_widget(row) }}
+                {# TODO this is not the good place for uniform, but ... #}
+                <script>
+                    $(function() {
+                        $('select').uniform();
+                    });
+                </script>
             </div>
         {% else %}
             <div class="{{ form.vars.id ~ "_group" }} control-group form-row">
-                {% if firstOrNot is not defined %}
                 <label class="control-label span4"></label>
-                {% endif %}
                 {{ form_widget(prototype) }}
-                {% set firstOrNot = true %}
+                {# TODO this is not the good place for uniform #}
+                <script>
+                    $(function() {
+                        $('select').uniform();
+                    });
+                </script>
             </div>
         {% endfor %}
     {% endspaceless %}
