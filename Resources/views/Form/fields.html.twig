@@ -87,7 +87,7 @@
 {% block form_label %}
     {% spaceless %}
 
-        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('control-label span4'))|trim}) %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('alignRight span4'))|trim}) %}
 
         {% if not compound %}
             {% set label_attr = label_attr|merge({'for': id}) %}
@@ -177,7 +177,7 @@
                             </div>
                         {% else %}
                             <div class="{{ form.vars.id ~ "_group" }} control-group {% if loop.last %}noBorderB{% endif %}">
-                                <label class="control-label span4"></label>
+                                <label class="alignRight span4"></label>
                                 {{ form_widget(rows) }}
                             </div>
                         {% endfor %}
@@ -202,7 +202,6 @@
                             {{ id }}IndexIntegrity = {{ id }}Count = jQuery('#{{ id }}').children('.row-fluid').length;
 
                             jQuery('#{{ id }}').children('.row-fluid').each(function () {
-
                                 add_{{ id }}FormDeleteLink($(this));
 
                                 {% if 'sort' == attrname_split|last %}
@@ -232,6 +231,7 @@
                             {% if 'sort' == attrname_split|last %}
 
                                 function add_{{ id }}FormSortableLink($tagFormDiv) {
+
                                     var $upFormB = $('<a href="#" class="btn btn-info" style="margin-left:7px;" title="{% trans  from "views" %}admin.admin.js.up.text{% endtrans %}">{% trans  from "views" %}admin.admin.js.up.text{% endtrans %}</a>');
                                     var $downFormB = $('<a href="#" class="btn btn-info" style="margin-left:7px;" title="{% trans  from "views" %}admin.admin.js.down.text{% endtrans %}">{% trans  from "views" %}admin.admin.js.down.text{% endtrans %}</a>');
 
@@ -260,6 +260,7 @@
                             {% endif %}
 
                             jQuery('#{{ attrvalue }}-{{ id }}').click(function (e) {
+
                                 var {{ id }}List = jQuery('#{{ id }}');
                                 var newWidget = {{ id }}List.attr('data-prototype');
                                 var exp = new RegExp(/__n[a]{1}me__(([\[\]_a-zA-Z0-9]+__n[a]{1}me__){0,})/g);
@@ -282,6 +283,7 @@
                                 {{ id }}Integrity();
 
                                 e.preventDefault();
+
                             });
                         });
                     </script>
@@ -312,23 +314,11 @@
             <div class="{{ form.vars.id ~ "_group" }} control-group form-row {% if loop.last %}noBorderB{% endif %}">
                 {{ form_label(row) }}
                 {{ form_widget(row) }}
-                {# TODO this is not the good place for uniform, but ... #}
-                <script>
-                    $(function() {
-                        $('select').uniform();
-                    });
-                </script>
             </div>
         {% else %}
             <div class="{{ form.vars.id ~ "_group" }} control-group form-row">
-                <label class="control-label span4"></label>
+                <label class="alignRight span4"></label>
                 {{ form_widget(prototype) }}
-                {# TODO this is not the good place for uniform #}
-                <script>
-                    $(function() {
-                        $('select').uniform();
-                    });
-                </script>
             </div>
         {% endfor %}
     {% endspaceless %}

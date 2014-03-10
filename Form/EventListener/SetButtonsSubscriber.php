@@ -42,7 +42,6 @@ class SetButtonsSubscriber implements EventSubscriberInterface
         $form = $event->getForm();
 
         $this->addCreateButtons($form);
-
         if ($data && $data->getId()) {
             $this->addDeleteButton($form);
         }
@@ -57,21 +56,21 @@ class SetButtonsSubscriber implements EventSubscriberInterface
             ->add('save', 'submit', array(
                     'label'     => 'black.bundle.assets.eventListener.setButtonsSubscriber.button.save.label',
                     'attr'      => array(
-                        'class'     => 'btn btn-success',
+                        'class'     => 'btn btn-success frmbtn',
                     )
                 )
             )
             ->add('saveAndAdd', 'submit', array(
                     'label'     => 'black.bundle.assets.eventListener.setButtonsSubscriber.button.saveAndAdd.label',
                     'attr'      => array(
-                        'class'     => 'btn btn-primary',
+                        'class'     => 'btn btn-primary frmbtn',
                     )
                 )
             )
             ->add('reset', 'reset', array(
                     'label'     => 'black.bundle.assets.eventListener.setButtonsSubscriber.button.reset.label',
                     'attr'      => array(
-                        'class'     => 'btn',
+                        'class'     => 'btn frmbtn',
                     )
                 )
             );
@@ -87,10 +86,9 @@ class SetButtonsSubscriber implements EventSubscriberInterface
                     'label'             => 'black.bundle.assets.eventListener.setButtonsSubscriber.button.delete.label',
                     'validation_groups' => false,
                     'attr'              => array(
-                        'class'             => 'btn btn-danger'
+                        'class'             => 'btn btn-danger frmbtn'
                     )
                 )
             );
     }
-
 }
