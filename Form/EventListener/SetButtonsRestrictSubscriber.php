@@ -53,14 +53,14 @@ class SetButtonsRestrictSubscriber implements EventSubscriberInterface
             ->add('save', 'submit', array(
                     'label'     => 'black.bundle.assets.eventListener.setButtonsSubscriber.button.save.label',
                     'attr'      => array(
-                        'class'     => 'btn btn-success frmbtn',
+                        'class'     => 'btn btn-success',
                     )
                 )
             )
             ->add('reset', 'reset', array(
                     'label'     => 'black.bundle.assets.eventListener.setButtonsSubscriber.button.reset.label',
                     'attr'      => array(
-                        'class'     => 'btn frmbtn',
+                        'class'     => 'btn',
                     )
                 )
             );

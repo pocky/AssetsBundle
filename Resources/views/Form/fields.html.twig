@@ -109,7 +109,7 @@
 
 {% block choice_label %}
     {% spaceless %}
-        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('alignRight span4'))|trim}) %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('control-label span4'))|trim}) %}
 
         {% if not compound %}
             {% set label_attr = label_attr|merge({'for': id}) %}
